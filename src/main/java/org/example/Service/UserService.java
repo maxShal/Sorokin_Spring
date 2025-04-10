@@ -1,8 +1,11 @@
 package org.example.Service;
 
 import jakarta.annotation.Nullable;
+import org.example.AccountProperties;
 import org.example.entity.Account;
 import org.example.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,11 +17,19 @@ import java.util.Map;
 public class UserService
 {
     private Map<Long, User> userMap =  new HashMap<>();
+    @Autowired
+    AccountProperties accountProperties;
+    @Autowired
+    AccountService accountService;
 
-    public User createUser(Long id, String login, @Nullable List<Account> accountList){
+    //private AccountService accountService = new AccountService();
 
-        User user = new User(id, login, accountList);
-        userMap.put(id, user);
+    public User createUser(String login){
+
+        User user = new User(userMap.size()+1, login, null);
+        Account account = accountService.createAccount(user.getId());
+        user.getAccountList().add(account);
+        userMap.put((long)userMap.size()+1 , user);
         return user;
     }
 

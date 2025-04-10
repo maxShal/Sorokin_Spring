@@ -2,6 +2,8 @@ package org.example.entity;
 
 
 
+import jakarta.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +17,7 @@ public class User {
 
     private List<Account> accountList = new ArrayList<>();
 
-    public User(long id, String login, List<Account> accountList) {
+    public User(long id, String login,  List<Account> accountList) {
         this.id = id;
         this.login = login;
         this.accountList = accountList != null ? accountList : new ArrayList<>();
