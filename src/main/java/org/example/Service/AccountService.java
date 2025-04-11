@@ -25,6 +25,10 @@ public class AccountService
         return account;
     }
 
+    public Map<Long, Account> getAccountMap() {
+        return accountMap;
+    }
+
     public Account getById(Long accountId)
     {
         return accountMap.get(accountId);

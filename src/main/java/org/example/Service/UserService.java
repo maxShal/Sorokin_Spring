@@ -24,6 +24,11 @@ public class UserService
 
     //private AccountService accountService = new AccountService();
 
+
+    public Map<Long, User> getUserMap() {
+        return userMap;
+    }
+
     public User createUser(String login){
 
         User user = new User(userMap.size()+1, login, null);

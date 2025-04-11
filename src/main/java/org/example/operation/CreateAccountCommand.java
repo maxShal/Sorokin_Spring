@@ -4,6 +4,7 @@ import org.example.Service.AccountService;
 import org.example.Service.UserService;
 import org.example.entity.Account;
 import org.example.entity.User;
+import org.example.exeption.ExceptionAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,10 @@ public class CreateAccountCommand implements OperationCommand
         long userId = scanner.nextLong();
         Account account1 = accountService.createAccount(userId);
         User user1 = userService.getById(userId);
+        if(userService.getUserMap().containsKey(userId))
+        {
+            throw new ExceptionAccount("Such User does not exist");
+        }
         user1.getAccountList().add(account1);
         System.out.println("New account created with ID: " + account1.getId() + " for user: " + userService.getById(userId).getLogin());
 
