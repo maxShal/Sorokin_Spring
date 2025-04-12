@@ -25,12 +25,12 @@ public class AccountService
         return account;
     }
 
-    public Map<Long, Account> getAccountMap() {
-        return accountMap;
-    }
-
     public Account getById(Long accountId)
     {
+        if(!accountMap.containsKey(accountId))
+        {
+            throw new ExceptionAccount("Не существует такого аккаунта ");
+        }
         return accountMap.get(accountId);
     }
 

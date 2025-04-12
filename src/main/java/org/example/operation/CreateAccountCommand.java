@@ -24,12 +24,8 @@ public class CreateAccountCommand implements OperationCommand
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the user id for which to create an account:");
         long userId = scanner.nextLong();
-        Account account1 = accountService.createAccount(userId);
         User user1 = userService.getById(userId);
-        if(userService.getUserMap().containsKey(userId))
-        {
-            throw new ExceptionAccount("Such User does not exist");
-        }
+        Account account1 = accountService.createAccount(userId);
         user1.getAccountList().add(account1);
         System.out.println("New account created with ID: " + account1.getId() + " for user: " + userService.getById(userId).getLogin());
 

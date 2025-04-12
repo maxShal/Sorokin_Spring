@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import org.example.AccountProperties;
 import org.example.entity.Account;
 import org.example.entity.User;
+import org.example.exeption.ExceptionAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,9 +41,12 @@ public class UserService
 
     public User getById(Long userId)
     {
-       return userMap.get(userId);
+        if(!userMap.containsKey(userId))
+        {
+            throw new ExceptionAccount("Нет такого юзера");
+        }
+        return userMap.get(userId);
     }
-
     public List<User> getAllUsers()
     {
        return new ArrayList<>(userMap.values());

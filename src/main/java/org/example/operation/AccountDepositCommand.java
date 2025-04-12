@@ -25,10 +25,6 @@ public class AccountDepositCommand implements OperationCommand{
         System.out.println("Enter amount to deposit:");
         long deposit = scanner.nextLong();
         Account accForTopUp = accountService.getById(accountId);
-        if (accountService.getAccountMap().containsKey(accountId))
-        {
-            throw new ExceptionAccount("Such account does not exist");
-        }
         accountService.topUp(accForTopUp, deposit);
         System.out.println("Amount " + deposit + " deposited  to account ID: " + accountId);
         System.out.println(accForTopUp.getMoneyAmount());
