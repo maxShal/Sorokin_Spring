@@ -184,7 +184,7 @@ public class AccountService
                 secondAcc.setMoneyAmount(secondAcc.getMoneyAmount() + transfer);;
             }
             transaction.commit();
-
+//
         }catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
