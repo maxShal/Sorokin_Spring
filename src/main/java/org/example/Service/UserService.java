@@ -1,54 +1,53 @@
 package org.example.Service;
 
-import jakarta.annotation.Nullable;
-import org.example.AccountProperties;
-import org.example.entity.Account;
+import org.example.TransactionHelper;
 import org.example.entity.User;
 import org.example.exeption.ExceptionAccount;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Component
+@Service
 public class UserService
 {
-    private Map<Long, User> userMap =  new HashMap<>();
     @Autowired
-    AccountProperties accountProperties;
+    SessionFactory sessionFactory;
     @Autowired
-    AccountService accountService;
+    TransactionHelper transactionHelper;
 
-    //private AccountService accountService = new AccountService();
-
-
-    public Map<Long, User> getUserMap() {
-        return userMap;
-    }
 
     public User createUser(String login){
 
-        User user = new User(userMap.size()+1, login, null);
-        Account account = accountService.createAccount(user.getId());
-        user.getAccountList().add(account);
-        userMap.put((long)userMap.size()+1 , user);
-        return user;
+        return transactionHelper.executeInTransaction(() -> {
+            User user = new User(login);
+            sessionFactory.getCurrentSession().persist(user);
+            return user;
+        });
     }
 
     public User getById(Long userId)
     {
-        if(!userMap.containsKey(userId))
-        {
-            throw new ExceptionAccount("Нет такого юзера");
-        }
-        return userMap.get(userId);
+        return transactionHelper.executeInTransaction(() -> {
+            User user = sessionFactory.getCurrentSession().get(User.class, userId);
+            if(user != null)
+            {
+                return user;
+            }
+            else {
+                throw new ExceptionAccount("Не существует такого аккаунта ");
+            }
+        });
     }
     public List<User> getAllUsers()
     {
-       return new ArrayList<>(userMap.values());
+        return transactionHelper.executeInTransaction(() -> {
+            List<User> users = new ArrayList<>();
+            users = sessionFactory.getCurrentSession()
+                    .createQuery("FROM User", User.class).list();
+            return users;
+        });
     }
 }

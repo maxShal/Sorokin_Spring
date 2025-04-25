@@ -1,26 +1,30 @@
 package org.example.entity;
-
-
-
 import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String login;
 
-    private List<Account> accountList = new ArrayList<>();
+    @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accountList;
 
-    public User(long id, String login,  List<Account> accountList) {
-        this.id = id;
+    public User( String login) {
         this.login = login;
-        this.accountList = accountList != null ? accountList : new ArrayList<>();
+        this.accountList =  new ArrayList<>();
+    }
+
+    public User() {
+        this.accountList = new ArrayList<>();
     }
 
     public Long getId() {
